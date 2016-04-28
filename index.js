@@ -14,7 +14,10 @@ function handleEvent(eventName) {
       username: 'Autobot'
     };
 
-    var notifications = service.slack_notification_events.split(',');
+    var notifications = []
+    if(service.slack_notification_channel) {
+      notifications = service.slack_notification_events.split(',');
+    }
     for (var i = 0; i < notifications.length; i++) {
      notifications[i] = notifications[i].trim();
     }

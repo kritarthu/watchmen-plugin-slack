@@ -1,6 +1,6 @@
 {
   "name": "watchmen-plugin-nodeslack",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Notifications via Slack for watchmen",
   "main": "index.js",
   "repository": {
