@@ -5,31 +5,28 @@ var merge = require('merge');
 var Slack = require('node-slack');
 require('dotenv').load({ silent: true });
 
-var slack = new Slack(process.env.WATCHMEN_SLACK_NOTIFICATION_URL);
-var defaultOptions = {
-  channel: '#general',
-  username: 'Watchmen',
-  icon_emoji: ':mega:'
-};
-
-var notifications = process.env.WATCHMEN_SLACK_NOTIFICATION_EVENTS.split(' ');
-console.log('Slack notifications are turned on for:');
-console.log(notifications);
-
-if ('WATCHMEN_SLACK_NOTIFICATION_CHANNEL' in process.env) {
-  defaultOptions.channel = process.env.WATCHMEN_SLACK_NOTIFICATION_CHANNEL;
-}
-
-if ('WATCHMEN_SLACK_NOTIFICATION_USERNAME' in process.env) {
-  defaultOptions.username = process.env.WATCHMEN_SLACK_NOTIFICATION_USERNAME;
-}
-
-if ('WATCHMEN_SLACK_NOTIFICATION_ICON_EMOJI' in process.env) {
-  defaultOptions.icon_emoji = process.env.WATCHMEN_SLACK_NOTIFICATION_ICON_EMOJI;
-}
-
 function handleEvent(eventName) {
   return function(service, data) {
+
+    var slack = new Slack(service.slack_notification_url);
+    var defaultOptions = {
+      channel: '#samsclub_automation',
+      username: 'Autobot'
+    };
+
+    var notifications = service.slack_notification_events.split(',');
+    for (var i = 0; i < notifications.length; i++) {
+     notifications[i] = notifications[i].trim();
+    }
+
+    console.log('Slack notifications are turned on for:');
+    console.log(notifications);
+    if(service.slack_notification_channel) {
+      defaultOptions.channel = service.slack_notification_channel;
+    }
+    if(service.slack_notification_username) {
+      defaultOptions.username = service.slack_notification_username;
+    }
     if (notifications.indexOf(eventName) === -1) {
       return;
     }
@@ -43,11 +40,40 @@ function handleEvent(eventName) {
       'service-ok':      'Service OK'
     };
 
-    var text    = '[' + friendlyNames[eventName] + '] on ' + service.name + ' ' + service.url;
-    var options = {
-      text: text
-    };
+    var error = '';
+    var color = "#36a64f";
+    if(friendlyNames[eventName]=='New Outage') {
+      error = data.error
+      color = "#c70606"
+    } else if(friendlyNames[eventName]=='Latency Warning') {
+      color = "#c79806"
+    }
 
+    var options = {
+        "text": "Change is service status",
+        "attachments": [
+            {
+                "fallback": "Required plain-text summary of the attachment.",
+                "color": color,
+                "author_name": service.slack_notification_username,
+                "author_icon": "https://cdn3.iconfinder.com/data/icons/basic-mobile-part-3/512/transformer-128.png",
+                "title": service.name,
+                "title_link": "http://monitoring.samsclubtools.walmart.com:8000/services",
+                "fields": [
+                    {
+                        "title": "Status",
+                        "value": "["+friendlyNames[eventName]+"] "+ error,
+                        "short": false
+                    },
+    				        {
+                        "title": "URL",
+                        "value": service.url,
+                        "short": false
+                    }
+                ]
+    		    }
+        ]
+    }
     slack.send(merge(defaultOptions, options));
   };
 }

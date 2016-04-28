@@ -1,16 +1,14 @@
 {
-  "name": "watchmen-plugin-slack",
-  "version": "0.1.0",
+  "name": "watchmen-plugin-nodeslack",
+  "version": "0.0.3",
   "description": "Notifications via Slack for watchmen",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/wiseNhammer/watchmen-plugin-slack.git"
+    "url": "https://github.com/kupadhy/watchmen-plugin-slack.git"
   },
   "author": {
-    "name": "Emily Horsman",
-    "email": "me@emilyhorsman.com",
-    "url": "http://emilyhorsman.com"
+    "name": "Kritarth"
   },
   "dependencies": {
     "dotenv": "^1.2.0",
