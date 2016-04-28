@@ -14,22 +14,13 @@ https://my.slack.com/services/new/incoming-webhook/
 
 Make sure your channel matches configuration for this plugin.
 
-## Environment variables
 
-`WATCHMEN_SLACK_NOTIFICATION_EVENTS` and `WATCHMEN_SLACK_NOTIFICATION_URL` are
-required. `WATCHMEN_SLACK_NOTIFICATION_EVENTS` should be a space separated list
-of Watchmen events that will trigger Slack notifications.
+The default username is `AutoBot`
 
-The default Slack channel is `#general`.
-
-The default icon emoji is 📣 `:mega`
-
-The default username is `Watchmen`
-
+## Service Object
 ```
-WATCHMEN_SLACK_NOTIFICATION_EVENTS='service-back latency-warning new-outage'
-WATCHMEN_SLACK_NOTIFICATION_URL='GET INCOMING WEBOOK URL FROM SLACK'
-WATCHMEN_SLACK_NOTIFICATION_CHANNEL='#notifications'
-WATCHMEN_SLACK_NOTIFICATION_USERNAME='Wise'
-WATCHMEN_SLACK_NOTIFICATION_ICON_EMOJI=':doge2:'
+service.slack_notification_events='service-back latency-warning new-outage'
+service.slack_notification_url='GET INCOMING WEBOOK URL FROM SLACK'
+service.slack_notification_channel='#notifications'
+service.slack_notification_username='Wise'
 ```
